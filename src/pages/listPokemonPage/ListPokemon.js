@@ -258,7 +258,7 @@ export default function ListPokemon() {
         <Tab eventKey="profile" title="My Pokemon List">
           <Container>
             <h1>My pokemon</h1>
-            {getLocalStorageMyPokemon().map((item, i) => {
+            {getLocalStorageMyPokemon() && getLocalStorageMyPokemon().length > 0 && getLocalStorageMyPokemon().map((item, i) => {
               return (
                 <Col key={i}>
                   <Card
