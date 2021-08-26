@@ -1,3 +1,6 @@
+# you can access the deployment results on the page :
+https://6128066689950b0007e7fe2d--musing-morse-4ea705.netlify.app/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
