@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Switch, Route } from "react-router-dom";
 
-function App() {
+// Import Pages
+import ListPokemon from "./pages/listPokemonPage/ListPokemon.js";
+// import DetailPokemon from "./pages/detailPokemonPage/DetailPokemon.js";
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // <ThemeProvider theme={theme}>
+    //   <CssBaseline />
+      <div>
+       
+        <Switch>
+          <Route path="/" component={ListPokemon} exact />
+           {/* <Route path="/detailpokemon" component={DetailPokemon} /> */}
+          {/*<Route path="/listseries" component={ListSeriesScreen} />
+          <Route path="/errorscreen" component={ErrorScreen} /> */}
+        </Switch>
+        
+      </div>
+    // </ThemeProvider>
   );
 }
-
-export default App;
