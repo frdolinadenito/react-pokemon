@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 
 // Import Pages
 import ListPokemon from "./pages/listPokemonPage/ListPokemon.js";
-// import DetailPokemon from "./pages/detailPokemonPage/DetailPokemon.js";
+
 export default function App() {
   return (
     // <ThemeProvider theme={theme}>

@@ -35,7 +35,6 @@ export const getListPokemon = (limit, offset) => {
         },
       }).then((result) => {
         const list = result.data.pokemons.results;
-        console.log("List pokemon", list);
 
         if (list) {
           dispatch({
@@ -98,7 +97,6 @@ export const getDetailPokemon = (nama_pokemon) => {
         },
       }).then((result) => {
         const list = result.data.pokemon;
-        console.log("detail pokemon", list);
 
         if (list) {
           dispatch({

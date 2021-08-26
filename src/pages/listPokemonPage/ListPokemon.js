@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -11,7 +13,6 @@ import Modal from "react-bootstrap/Modal";
 import Carousel from "react-bootstrap/Carousel";
 import Table from "react-bootstrap/Table";
 import Image from "react-bootstrap/Image";
-import Form from "react-bootstrap/Form";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 
@@ -33,11 +34,10 @@ import {
 } from "../../action/ListPokemonAction";
 
 export default function ListPokemon() {
-  const { listPokemon, detailPokemon, catchPokemon } = useSelector((state) => {
+  const { listPokemon, detailPokemon } = useSelector((state) => {
     return {
       listPokemon: state.pokemonReducer.dataListPokemon,
       detailPokemon: state.pokemonReducer.dataDetailPokemon,
-      catchPokemon: getLocalStorageMyPokemon(),
     };
   });
 
@@ -49,15 +49,12 @@ export default function ListPokemon() {
   const [showPrevButton, setshowPrevButton] = useState(false);
   const [loader, setLoader] = useState(false);
   const [nickname, setNickname] = useState(false);
-  const [detail, setDetail] = useState("");
   const [limit, setLimit] = useState(9);
   const [offset, setOffset] = useState(0);
   const [disbledButton, setDisbledButton] = useState(false);
   const [alert, setAlert] = useState(false);
-  const [pokemonName, setPokemonName] = useState("");
 
   useEffect(() => {
-    //lifecycle component
     dispatch(getListPokemon(limit, offset));
   }, [limit, offset]);
 
@@ -71,7 +68,6 @@ export default function ListPokemon() {
 
   useEffect(() => {
     if (detailPokemon !== null) {
-      setDetail(true);
       setShow(true);
     }
   }, [detailPokemon]);
@@ -80,8 +76,6 @@ export default function ListPokemon() {
     e.preventDefault();
     setTempName(nama_pokemon);
     dispatch(getDetailPokemon(nama_pokemon));
-
-    console.log(nama_pokemon);
   };
 
   const handleClose = () => setShow(false);
@@ -119,7 +113,6 @@ export default function ListPokemon() {
   const hotpinkHoverOrFocus = css({
     "&:hover,&:focus": hotpink,
     marginTop: 20,
-    //margin: 10
   });
 
   const PrevButton = () => (
@@ -165,30 +158,20 @@ export default function ListPokemon() {
     return JSON.parse(value);
   }
 
-  function rmLocalStorageMyPokemon() {
-    localStorage.removeItem("MY_POKEMON");
-  }
-
   const { register, handleSubmit } = useForm();
-  const [catchPokemonName, setCatchPokemonName] = useState("");
-  const [result, setResult] = useState("");
   const onSubmit = (data) => {
-    console.log("abc", data.nickName);
     let nickNamePokemon = data.nickName;
     if (nickNamePokemon.length > 0) {
       let tempPokedex = listPokemon.filter((poke) => {
         if (poke.name === tempName) {
-          console.log("tempName", tempName);
           return poke;
         }
       });
-      console.log("tempPokedex", tempPokedex);
 
       const object2 = {
         ...tempPokedex[0],
         nickname: nickNamePokemon,
       };
-      console.log("tempPokedex2", object2);
       let arrayPokemon = [];
       arrayPokemon.push(object2);
       setLocalStorageMyPokemon(arrayPokemon);
@@ -199,14 +182,9 @@ export default function ListPokemon() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <input {...register("nickName")} placeholder="Pokemon Nickname" />
 
-      {/* <p>{result}</p> */}
       <input type="submit" />
     </form>
   );
-
-  useEffect(() => {
-    console.log("getLocalStorageMyPokemon()", getLocalStorageMyPokemon());
-  }, []);
 
   const AlertFailedCatch = () => (
     <Badge VariantColor="#FF6B6B">
@@ -217,27 +195,18 @@ export default function ListPokemon() {
 
   const succesWith50PercentChance = () => {
     setLoader(true);
-    // Math.random() < 0.5 && setCounter((p) => p + 1);
     if (Math.random() < 0.5) {
       setCounter((p) => p + 1);
-      console.log("count", counter);
       setNickname(true);
       setDisbledButton(true);
       setAlert(false);
     } else {
-      console.log("gagal", counter);
       setAlert(true);
       setNickname(false);
     }
     setTimeout(() => {
       setLoader(false);
     }, 2000);
-  };
-
-  const addPokedeck = (onSubmit) => {
-    setNickname(false);
-    setDisbledButton(false);
-    
   };
 
   return (
@@ -281,7 +250,7 @@ export default function ListPokemon() {
               })}
             </Row>
             <div>
-              {showPrevButton ? <PrevButton /> : null}
+              {showPrevButton && <PrevButton />}
               <NextButton />
             </div>
           </Container>
@@ -327,9 +296,9 @@ export default function ListPokemon() {
                 </Col>
               );
             })}
-            
+
             <div>
-              {showPrevButton ? <PrevButton /> : null}
+              {showPrevButton && <PrevButton />}
               <NextButton />
             </div>
           </Container>
@@ -418,7 +387,7 @@ export default function ListPokemon() {
                   <tbody>
                     {detailPokemon?.moves.map((item, index) => {
                       return (
-                        <tr>
+                        <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{item.move.name}</td>
                         </tr>
@@ -438,7 +407,7 @@ export default function ListPokemon() {
                   <tbody>
                     {detailPokemon?.types.map((item, index) => {
                       return (
-                        <tr>
+                        <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{item.type.name}</td>
                         </tr>
@@ -448,19 +417,22 @@ export default function ListPokemon() {
                 </Table>
 
                 <h2>Pokemon caught : {counter}</h2>
-                <div>{alert ? <AlertFailedCatch /> : null}</div>
+                {alert && (
+                  <div>
+                    <AlertFailedCatch />
+                  </div>
+                )}
 
                 <Button
                   disabled={!!disbledButton}
                   css={hotpinkHoverOrFocus}
                   onClick={() => {
-                    //loaderShow();
                     succesWith50PercentChance();
                   }}
                 >
                   <FontAwesomeIcon icon={faHandshake} size="lg" /> Catch Pokemon
                 </Button>
-                {nickname ? <ImputUsername /> : null}
+                {nickname && <ImputUsername />}
               </Col>
             </Row>
           </Container>
@@ -473,9 +445,9 @@ export default function ListPokemon() {
             Save Changes
           </Button>
         </Modal.Footer>
-        {loader ? <LoaderShow /> : null}
+        {loader && <LoaderShow />}
       </Modal>
-      {loader ? <LoaderShow /> : null}
+      {loader && <LoaderShow />}
     </div>
   );
 }
