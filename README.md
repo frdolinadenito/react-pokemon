@@ -1,4 +1,4 @@
-# you can access the deployment results on the page :
+# you can access the deployment results at :
 https://6128066689950b0007e7fe2d--musing-morse-4ea705.netlify.app/
 
 # Getting Started with Create React App
